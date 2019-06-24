@@ -13,14 +13,14 @@ public interface RobotInterface {
      *           to be to scale since it will be scaled to the appropriate
      *           size.
      */
-    void changeRobot(BufferedImage im);
+	RobotInterface changeRobot(BufferedImage im);
 
     /**
      * Changes the image of the Robot
      *
      * @param urlName The URL of the image that specifies the Robot's image.
      */
-    void changeRobot(String urlName);
+    RobotInterface changeRobot(String urlName);
 
     int getPenWidth();
 
@@ -29,7 +29,7 @@ public interface RobotInterface {
      *
      * @param size the new pen size given as an integer between 1 and 10.
      */
-    void setPenWidth(int size);
+    RobotInterface setPenWidth(int size);
 
     Color getPenColor();
 
@@ -38,7 +38,7 @@ public interface RobotInterface {
      *
      * @param color the new pen color
      */
-    void setPenColor(Color color);
+    RobotInterface setPenColor(Color color);
 
     /**
      * Sets the pen color given the red, green and blue components of the new
@@ -48,27 +48,27 @@ public interface RobotInterface {
      * @param g the green component of the new color
      * @param b the blue component of the new color
      */
-    void setPenColor(int r, int g, int b);
+    RobotInterface setPenColor(int r, int g, int b);
 
     /**
      * Sets the pen color to a random color.
      */
-    void setRandomPenColor();
+    RobotInterface setRandomPenColor();
 
     /**
      * Removes all lines drawn by this Robot.
      */
-    void clearDrawables();
+    RobotInterface clearDrawables();
 
     /**
      * Makes the image of the Robot small
      */
-    void miniaturize();
+    RobotInterface miniaturize();
 
     /**
      * Makes the image of the Robot big
      */
-    void expand();
+    RobotInterface expand();
 
     /**
      * Set the position of the robot to (x, y) while maintaining its direction.
@@ -76,7 +76,7 @@ public interface RobotInterface {
      * @param x the x-coordinate of the new position
      * @param y the y-coordinate of the new position
      */
-    void setPos(float x, float y);
+    RobotInterface setPos(float x, float y);
 
     /**
      * Gets the robot's angle of orientation in degrees.
@@ -93,27 +93,27 @@ public interface RobotInterface {
      * @param a the angle in radians
      * @see #getAngle()
      */
-    void setAngle(double a);
+    RobotInterface setAngle(double a);
 
     /**
      * Makes the Robot sparkle.
      */
-    void sparkle();
+    RobotInterface sparkle();
 
     /**
      * Removes sparkles
      */
-    void unSparkle();
+    RobotInterface unSparkle();
 
     /**
      * Make the Robot invisible. The Robot is visible initially.
      */
-    void hide();
+    RobotInterface hide();
 
     /**
      * Makes the Robot visible
      */
-    void show();
+    RobotInterface show();
 
     /**
      * Makes the robot move a given distance. A negative distance makes the
@@ -121,7 +121,7 @@ public interface RobotInterface {
      *
      * @param distance the distance to move in units of points
      */
-    void move(int distance);
+    RobotInterface move(int distance);
 
     /**
      * Makes the Robot move one step. If the sgn is negative, the Robot moves
@@ -134,7 +134,7 @@ public interface RobotInterface {
      *                                  to happen).
      * @throws IllegalArgumentException if sgn is 0.
      */
-    void microMove(int sgn) throws InterruptedException;
+    RobotInterface microMove(int sgn) throws InterruptedException;
 
     /**
      * Makes the Robot turn in place a given number of degrees. If the argument
@@ -143,7 +143,7 @@ public interface RobotInterface {
      *
      * @param degrees The number of degrees to turn.
      */
-    void turn(double degrees);
+    RobotInterface turn(double degrees);
 
     /**
      * Turn the robot in place until it has reached an orientation given in degrees.
@@ -151,7 +151,7 @@ public interface RobotInterface {
      *
      * @param degrees the desired orientation.
      */
-    void turnTo(double degrees);
+    RobotInterface turnTo(double degrees);
 
     /**
      * Makes the Robot turn in place a small angle. If the argument is positive,
@@ -163,14 +163,14 @@ public interface RobotInterface {
      *                                  to happen).
      * @throws IllegalArgumentException if the sgn is 0.
      */
-    void microTurn(int sgn) throws InterruptedException;
+    RobotInterface microTurn(int sgn) throws InterruptedException;
 
     /**
      * Waits a given number of milliseconds.
      *
      * @param millis the number of milliseconds to wait
      */
-    void sleep(int millis);
+    RobotInterface sleep(int millis);
 
     /**
      * Places the robot at (x, y)
@@ -180,7 +180,7 @@ public interface RobotInterface {
      * @deprecated Use {@link #setPos(float x, float y)}
      */
     @Deprecated
-    void moveTo(float x, float y);
+    RobotInterface moveTo(float x, float y);
 
     /**
      * Move the Robot to a given position. The Robot does not draw any line
@@ -192,7 +192,7 @@ public interface RobotInterface {
      * @param y        the y-coordinate of the new position
      * @param relative if true, x and y a relative to the robot's current position
      */
-    void moveTo(float x, float y, boolean relative);
+    RobotInterface moveTo(float x, float y, boolean relative);
 
     /**
      * Move the robot forward to a given position. If necessary, turn the robot
@@ -203,7 +203,7 @@ public interface RobotInterface {
      * @param relative if true, x and y are given relative to the robot's current
      *                 position
      */
-    void lineTo(float x, float y, boolean relative);
+    RobotInterface lineTo(float x, float y, boolean relative);
 
     /**
      * Move the robot along a quadratic curve given by the robot's current position
@@ -217,7 +217,7 @@ public interface RobotInterface {
      * @param relative if true, the coordinates are give relative to the robot's
      *                 current position
      */
-    void quadTo(float x1, float y1, float x2, float y2, boolean relative);
+    RobotInterface quadTo(float x1, float y1, float x2, float y2, boolean relative);
 
     /**
      * Move the robot along a cubic curve given by the robot's current position
@@ -233,7 +233,7 @@ public interface RobotInterface {
      * @param relative if true, the coordinates are give relative to the robot's
      *                 current position
      */
-    void cubicTo(float x1, float y1, float x2, float y2, float x3, float y3, boolean relative);
+    RobotInterface cubicTo(float x1, float y1, float x2, float y2, float x3, float y3, boolean relative);
 
     /**
      * Move the robot along a path.
@@ -242,14 +242,14 @@ public interface RobotInterface {
      * @param fill         if true and the robot's pen is down, fill the path
      *                     with the current pen color, otherwise draw the path
      */
-    void followPath(PathIterator pathIterator, boolean fill);
+    RobotInterface followPath(PathIterator pathIterator, boolean fill);
 
     /**
      * Move the robot along a path and, if the pen is down, draw the path
      *
      * @param pathIterator a PathIterator specifying the path
      */
-    void followPath(PathIterator pathIterator);
+    RobotInterface followPath(PathIterator pathIterator);
 
     /**
      * @return the x-coordinate of the robot's position
@@ -264,19 +264,19 @@ public interface RobotInterface {
     /**
      * Lifts the pen, i.e., the Robot stops drawing lines or curves.
      */
-    void penUp();
+    RobotInterface penUp();
 
     /**
      * Set the pen down, i.e., the Robot traces its movements with lines or curves.
      */
-    void penDown();
+    RobotInterface penDown();
 
     /**
      * Sets the speed of the Robot.
      *
      * @param speed the speed specified as a number between 1 and 100.
      */
-    void setSpeed(int speed);
+    RobotInterface setSpeed(int speed);
 
     /**
      * Adds a {@link KeyboardAdapter} to the robot. It is possible to add more
@@ -287,5 +287,5 @@ public interface RobotInterface {
      * @param adapter the KeyboardAdapter
      * @see KeyboardAdapter
      */
-    void addKeyboardAdapter(KeyboardAdapter adapter);
+    RobotInterface addKeyboardAdapter(KeyboardAdapter adapter);
 }

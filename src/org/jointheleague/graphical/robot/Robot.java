@@ -195,7 +195,7 @@ public class Robot implements RobotInterface {
      *
      * @param g2 The graphics object used to draw the Robot.
      */
-    void draw(Graphics2D g2) {
+    Robot draw(Graphics2D g2) {
         for (Drawable drawable : getDrawables()) {
             drawable.draw(g2);
         }
@@ -238,6 +238,7 @@ public class Robot implements RobotInterface {
             g2.fillRect(xDot, yDot, 5, 5);
         }
         g2.setTransform(cached); // restore the standard coordinate system
+        return this;
     }
 
     private synchronized boolean isMini() {
@@ -245,7 +246,7 @@ public class Robot implements RobotInterface {
     }
 
     @Override
-    public synchronized void changeRobot(BufferedImage im) {
+    public synchronized Robot changeRobot(BufferedImage im) {
         Image imMax = im.getScaledInstance(MAXI_IMAGE_SIZE, MAXI_IMAGE_SIZE, Image.SCALE_SMOOTH);
         Image imMin = im.getScaledInstance(MINI_IMAGE_SIZE, MINI_IMAGE_SIZE, Image.SCALE_SMOOTH);
         synchronized (this) {
@@ -253,10 +254,11 @@ public class Robot implements RobotInterface {
             miniImage = imMin;
             image = isMini ? miniImage : maxiImage;
         }
+        return this;
     }
 
     @Override
-    public synchronized void changeRobot(String urlName) {
+    public synchronized Robot changeRobot(String urlName) {
         BufferedImage newImage;
         try {
             URL url = new URL(urlName);
@@ -267,6 +269,7 @@ public class Robot implements RobotInterface {
             newImage = (BufferedImage) image;
         }
         changeRobot(newImage);
+        return this;
     }
 
     @Override
@@ -275,8 +278,9 @@ public class Robot implements RobotInterface {
     }
 
     @Override
-    public synchronized void setPenWidth(int size) {
+    public synchronized Robot setPenWidth(int size) {
         penWidth = Math.min(Math.max(1, size), 10);
+        return this;
     }
 
     @Override
@@ -285,35 +289,40 @@ public class Robot implements RobotInterface {
     }
 
     @Override
-    public synchronized void setPenColor(Color color) {
+    public synchronized Robot setPenColor(Color color) {
         penColor = color;
+        return this;
     }
 
     @Override
-    public void setPenColor(int r, int g, int b) {
+    public Robot setPenColor(int r, int g, int b) {
         r = Math.min(Math.max(0, r), 255);
         g = Math.min(Math.max(0, g), 255);
         b = Math.min(Math.max(0, b), 255);
 
         penColor = new Color(r, g, b);
+        return this;
     }
 
     @Override
-    public void setRandomPenColor() {
+    public Robot setRandomPenColor() {
         ThreadLocalRandom rng = ThreadLocalRandom.current();
         int r = rng.nextInt(256);
         int b = rng.nextInt(256);
         int g = rng.nextInt(256);
         penColor = new Color(r, g, b);
+        return this;
     }
 
-    private synchronized void addDrawable(final Drawable segment) {
+    private synchronized Robot addDrawable(final Drawable segment) {
         drawables.add(segment);
+        return this;
     }
 
     @Override
-    public synchronized void clearDrawables() {
+    public synchronized Robot clearDrawables() {
         drawables.clear();
+        return this;
     }
 
     private synchronized List<Drawable> getDrawables() {
@@ -324,25 +333,29 @@ public class Robot implements RobotInterface {
         return currentDrawable;
     }
 
-    private synchronized void setCurrentDrawable(Drawable drawable) {
+    private synchronized Robot setCurrentDrawable(Drawable drawable) {
         this.currentDrawable = drawable;
+        return this;
     }
 
     @Override
-    public synchronized void miniaturize() {
+    public synchronized Robot miniaturize() {
         image = miniImage;
         isMini = true;
+        return this;
     }
 
     @Override
-    public synchronized void expand() {
+    public synchronized Robot expand() {
         image = maxiImage;
         isMini = false;
+        return this;
     }
 
     @Override
-    public synchronized void setPos(float x, float y) {
+    public synchronized Robot setPos(float x, float y) {
         pos = new Robot.Pos(x, y);
+        return this;
     }
 
     @Override
@@ -351,13 +364,15 @@ public class Robot implements RobotInterface {
     }
 
     @Override
-    public synchronized void setAngle(double a) {
+    public synchronized Robot setAngle(double a) {
         angle = (a + 180.0) % 360.0 - 180.0;
         if (angle < -180) angle += 360;
+        return this;
     }
 
-    private synchronized void incrementAngle(int delta) {
+    private synchronized Robot incrementAngle(int delta) {
         setAngle(angle + delta);
+        return this;
     }
 
     private synchronized boolean isSparkling() {
@@ -365,13 +380,15 @@ public class Robot implements RobotInterface {
     }
 
     @Override
-    public synchronized void sparkle() {
+    public synchronized Robot sparkle() {
         isSparkling = true;
+        return this;
     }
 
     @Override
-    public synchronized void unSparkle() {
+    public synchronized Robot unSparkle() {
         isSparkling = false;
+        return this;
     }
 
     private synchronized boolean isVisible() {
@@ -379,27 +396,30 @@ public class Robot implements RobotInterface {
     }
 
     @Override
-    public synchronized void hide() {
+    public synchronized Robot hide() {
         isVisible = false;
+        return this;
     }
 
     @Override
-    public synchronized void show() {
+    public synchronized Robot show() {
         isVisible = true;
+        return this;
     }
 
     @Override
-    public void move(int distance) {
+    public Robot move(int distance) {
         float[] ctrlPoints = new float[2];
 
         final double rAngle = Math.toRadians(getAngle());
         ctrlPoints[0] = (float) (getX() + distance * Math.sin(rAngle));
         ctrlPoints[1] = (float) (getY() - distance * Math.cos(rAngle));
         segmentTo(new Line(getX(), getY(), ctrlPoints, getPenWidth(), getPenColor()), distance >= 0);
+        return this;
     }
 
     @Override
-    public void microMove(int sgn) throws InterruptedException {
+    public Robot microMove(int sgn) throws InterruptedException {
         if (sgn == 0) {
             throw new IllegalArgumentException("The argument sgn must be non-zero.");
         }
@@ -417,10 +437,11 @@ public class Robot implements RobotInterface {
                 addDrawable(new Line(startX, startY, ctrlPoints, getPenWidth(), getPenColor()));
             }
         }
+        return this;
     }
 
     @Override
-    public void turn(double degrees) {
+    public Robot turn(double degrees) {
         double degreesTurned = 0;
         int sgn = degrees < 0 ? -1 : 1;
 
@@ -437,32 +458,36 @@ public class Robot implements RobotInterface {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        return this;
     }
 
     @Override
-    public void turnTo(double degrees) {
+    public Robot turnTo(double degrees) {
         turn(getAngleToTurn(degrees));
+        return this;
     }
 
     @Override
-    public void microTurn(int sgn) throws InterruptedException {
+    public Robot microTurn(int sgn) throws InterruptedException {
         if (sgn == 0) {
             throw new IllegalArgumentException("sgn must be non-zero.");
         }
         leakyBucket.take();
         incrementAngle(sgn * speed);
+        return this;
     }
 
-    void doNothing() {
+    Robot doNothing() {
         try {
             leakyBucket.take();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        return this;
     }
 
     @Override
-    public void sleep(int millis) {
+    public Robot sleep(int millis) {
         try {
             int numTicks = millis / TICK_LENGTH;
             for (int i = 0; i < numTicks; i++) {
@@ -471,42 +496,47 @@ public class Robot implements RobotInterface {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        return this;
     }
 
     @Override
     @Deprecated
-    public synchronized void moveTo(float x, float y) {
+    public synchronized Robot moveTo(float x, float y) {
         pos = new Pos(x, y);
+        return this;
     }
 
     @Override
-    public void moveTo(float x, float y, boolean relative) {
+    public Robot moveTo(float x, float y, boolean relative) {
         float[] ctrlPoints = new float[2];
         ctrlPoints[0] = relative ? getX() + x : x;
         ctrlPoints[1] = relative ? getY() + y : y;
         segmentTo(new Move(getX(), getY(), ctrlPoints), true);
+        return this;
     }
 
     @Override
-    public void lineTo(final float x, final float y, final boolean relative) {
+    public Robot lineTo(final float x, final float y, final boolean relative) {
         float[] ctrlPoints = new float[2];
         ctrlPoints[0] = relative ? getX() + x : x;
         ctrlPoints[1] = relative ? getY() + y : y;
         segmentTo(new Line(getX(), getY(), ctrlPoints, getPenWidth(), getPenColor()), true);
+        return this;
     }
 
     @Override
-    public void quadTo(float x1, float y1, float x2, float y2, boolean relative) {
+    public Robot quadTo(float x1, float y1, float x2, float y2, boolean relative) {
         float[] ctrlPoints = new float[4];
         ctrlPoints[0] = relative ? getX() + x1 : x1;
         ctrlPoints[1] = relative ? getY() + y1 : y1;
         ctrlPoints[2] = relative ? getX() + x2 : x2;
         ctrlPoints[3] = relative ? getY() + y2 : y2;
         segmentTo(new Quad(getX(), getY(), ctrlPoints, getPenWidth(), getPenColor()), true);
+        return this;
     }
 
     @Override
-    public void cubicTo(float x1, float y1, float x2, float y2, float x3, float y3, boolean relative) {
+    public Robot cubicTo(float x1, float y1, float x2, float y2, float x3, float y3, boolean relative) {
         float[] ctrlPoints = new float[6];
         ctrlPoints[0] = relative ? getX() + x1 : x1;
         ctrlPoints[1] = relative ? getY() + y1 : y1;
@@ -515,9 +545,10 @@ public class Robot implements RobotInterface {
         ctrlPoints[4] = relative ? getX() + x3 : x3;
         ctrlPoints[5] = relative ? getY() + y3 : y3;
         segmentTo(new Cubic(getX(), getY(), ctrlPoints, getPenWidth(), getPenColor()), true);
+        return this;
     }
 
-    private void segmentTo(Segment segment, boolean forwards) {
+    private Robot segmentTo(Segment segment, boolean forwards) {
         final double directionAdjustment = forwards ? 0.0 : Math.PI;
         double startAngle = segment.getStartAngle();
         if (!Double.isNaN(startAngle)) turnTo(startAngle + directionAdjustment);
@@ -545,10 +576,11 @@ public class Robot implements RobotInterface {
                 setCurrentDrawable(null);
             }
         }
+        return this;
     }
 
     @Override
-    public void followPath(PathIterator pathIterator, boolean fill) {
+    public Robot followPath(PathIterator pathIterator, boolean fill) {
         DynamicPath dynamicPath = new DynamicPath(pathIterator, getPenWidth(), getPenColor(), this, fill);
         if (isPenDown()) currentDrawable = dynamicPath;
         try {
@@ -564,11 +596,13 @@ public class Robot implements RobotInterface {
                 setCurrentDrawable(null);
             }
         }
+        return this;
     }
 
     @Override
-    public void followPath(PathIterator pathIterator) {
+    public Robot followPath(PathIterator pathIterator) {
         followPath(pathIterator, false);
+        return this;
     }
 
     private double getAngleToTurn(final double targetAngle) {
@@ -593,22 +627,25 @@ public class Robot implements RobotInterface {
     }
 
     @Override
-    public synchronized void penUp() {
+    public synchronized Robot penUp() {
         penDown = false;
+        return this;
     }
 
     @Override
-    public synchronized void penDown() {
+    public synchronized Robot penDown() {
         penDown = true;
+        return this;
     }
 
     @Override
-    public synchronized void setSpeed(int speed) {
+    public synchronized Robot setSpeed(int speed) {
         this.speed = Math.min(Math.max(MIN_SPEED, speed), MAX_SPEED);
+        return this;
     }
 
     @Override
-    public void addKeyboardAdapter(final KeyboardAdapter adapter) {
+    public Robot addKeyboardAdapter(final KeyboardAdapter adapter) {
         SwingUtilities.invokeLater(() -> {
             RobotWindow window = RobotWindow.getInstance();
             KeyListener[] listeners = window.getKeyListeners();
@@ -624,6 +661,7 @@ public class Robot implements RobotInterface {
             adapter.setRobot(Robot.this);
             window.addKeyListener(adapter);
         });
+        return this;
     }
 
     private enum TimeQuantum {
