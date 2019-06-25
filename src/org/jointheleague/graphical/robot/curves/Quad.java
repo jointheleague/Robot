@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.geom.Path2D;
 import java.awt.geom.QuadCurve2D;
 
-public final class Quad implements Drawable, Segment {
+final public class Quad implements Drawable, Segment {
 
     private final float startX;
     private final float startY;

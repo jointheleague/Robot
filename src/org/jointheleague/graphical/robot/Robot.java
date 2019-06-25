@@ -371,8 +371,7 @@ public class Robot implements RobotInterface {
     }
 
     private synchronized Robot incrementAngle(int delta) {
-        setAngle(angle + delta);
-        return this;
+        return setAngle(angle + delta);
     }
 
     private synchronized boolean isSparkling() {
@@ -414,8 +413,7 @@ public class Robot implements RobotInterface {
         final double rAngle = Math.toRadians(getAngle());
         ctrlPoints[0] = (float) (getX() + distance * Math.sin(rAngle));
         ctrlPoints[1] = (float) (getY() - distance * Math.cos(rAngle));
-        segmentTo(new Line(getX(), getY(), ctrlPoints, getPenWidth(), getPenColor()), distance >= 0);
-        return this;
+        return segmentTo(new Line(getX(), getY(), ctrlPoints, getPenWidth(), getPenColor()), distance >= 0);
     }
 
     @Override
@@ -463,8 +461,7 @@ public class Robot implements RobotInterface {
 
     @Override
     public Robot turnTo(double degrees) {
-        turn(getAngleToTurn(degrees));
-        return this;
+        return turn(getAngleToTurn(degrees));
     }
 
     @Override
@@ -511,8 +508,7 @@ public class Robot implements RobotInterface {
         float[] ctrlPoints = new float[2];
         ctrlPoints[0] = relative ? getX() + x : x;
         ctrlPoints[1] = relative ? getY() + y : y;
-        segmentTo(new Move(getX(), getY(), ctrlPoints), true);
-        return this;
+        return segmentTo(new Move(getX(), getY(), ctrlPoints), true);
     }
 
     @Override
@@ -520,8 +516,7 @@ public class Robot implements RobotInterface {
         float[] ctrlPoints = new float[2];
         ctrlPoints[0] = relative ? getX() + x : x;
         ctrlPoints[1] = relative ? getY() + y : y;
-        segmentTo(new Line(getX(), getY(), ctrlPoints, getPenWidth(), getPenColor()), true);
-        return this;
+        return segmentTo(new Line(getX(), getY(), ctrlPoints, getPenWidth(), getPenColor()), true);
     }
 
     @Override
@@ -531,8 +526,7 @@ public class Robot implements RobotInterface {
         ctrlPoints[1] = relative ? getY() + y1 : y1;
         ctrlPoints[2] = relative ? getX() + x2 : x2;
         ctrlPoints[3] = relative ? getY() + y2 : y2;
-        segmentTo(new Quad(getX(), getY(), ctrlPoints, getPenWidth(), getPenColor()), true);
-        return this;
+        return segmentTo(new Quad(getX(), getY(), ctrlPoints, getPenWidth(), getPenColor()), true);
     }
 
     @Override
@@ -544,8 +538,7 @@ public class Robot implements RobotInterface {
         ctrlPoints[3] = relative ? getY() + y2 : y2;
         ctrlPoints[4] = relative ? getX() + x3 : x3;
         ctrlPoints[5] = relative ? getY() + y3 : y3;
-        segmentTo(new Cubic(getX(), getY(), ctrlPoints, getPenWidth(), getPenColor()), true);
-        return this;
+        return segmentTo(new Cubic(getX(), getY(), ctrlPoints, getPenWidth(), getPenColor()), true);
     }
 
     private Robot segmentTo(Segment segment, boolean forwards) {
