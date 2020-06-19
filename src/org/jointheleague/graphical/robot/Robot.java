@@ -518,9 +518,9 @@ public class Robot implements RobotInterface {
     }
 
     private void segmentTo(Segment segment, boolean forwards) {
-        final double directionAdjustment = forwards ? 0.0 : Math.PI;
+        final double directionAdjustment = forwards ? 0.0 : 180.0;
         double startAngle = segment.getStartAngle();
-        if (!Double.isNaN(startAngle)) turnTo(startAngle + directionAdjustment);
+        if (!Double.isNaN(startAngle)) turnTo(Math.toDegrees(startAngle) + directionAdjustment);
 
         final float deltaT = speed / segment.getSize();
         float t = 0.0F;
@@ -572,7 +572,7 @@ public class Robot implements RobotInterface {
     }
 
     private double getAngleToTurn(final double targetAngle) {
-        final double angle = Math.toDegrees(targetAngle - Math.toRadians(getAngle()));
+        final double angle = targetAngle - getAngle();
         if (angle > 180.0) return (angle + 180.0) % 360.0 - 180.0;
         if (angle < -180.0) return (angle - 180.0) % 360.0 + 180.0;
         return angle;
